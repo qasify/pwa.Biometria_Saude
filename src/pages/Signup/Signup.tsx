@@ -10,7 +10,7 @@ import {
   validateEmail,
   validatePhone,
 } from "./utils/helpers";
-import { LogInErrors } from "./types";
+import { SignupErrors } from "./types";
 import constants from "./utils/constants";
 import { signup } from "../../api";
 import ConfirmationModal from "../../components/ConfirmationModal";
@@ -25,29 +25,29 @@ const BiometricRegistration: React.FC = () => {
   const [birthDate, setBirthDate] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState<LogInErrors | null>(null);
+  const [errors, setErrors] = useState<SignupErrors | null>(null);
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(
     null
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setErrors((prev) => ({ ...prev, cpf: null } as LogInErrors));
+    setErrors((prev) => ({ ...prev, cpf: null } as SignupErrors));
     setCpf(formatCpf(e.target.value));
   };
 
   const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setErrors((prev) => ({ ...prev, birthDate: null } as LogInErrors));
+    setErrors((prev) => ({ ...prev, birthDate: null } as SignupErrors));
     setBirthDate(e.target.value);
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setErrors((prev) => ({ ...prev, phone: null } as LogInErrors));
+    setErrors((prev) => ({ ...prev, phone: null } as SignupErrors));
     setPhone(formatPhone(e.target.value));
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setErrors((prev) => ({ ...prev, email: null } as LogInErrors));
+    setErrors((prev) => ({ ...prev, email: null } as SignupErrors));
     setEmail(e.target.value);
   };
 

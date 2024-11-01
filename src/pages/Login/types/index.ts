@@ -1,3 +1,3 @@
-import { LogInError, LogInErrors } from "./errors";
+import { LoginError, LoginErrors } from "./errors";
 
-export type { LogInError, LogInErrors };
+export type { LoginError, LoginErrors };

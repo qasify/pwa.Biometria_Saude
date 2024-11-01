@@ -1,5 +1,5 @@
-type LogInError = "cpf" | "email" | "phone" | "birthDate";
+type LoginError = "cpf" | "phote";
 
-type LogInErrors = Record<LogInError, string | null>;
+type LoginErrors = Record<LoginError, string | null>;
 
-export type { LogInError, LogInErrors };
+export type { LoginError, LoginErrors};

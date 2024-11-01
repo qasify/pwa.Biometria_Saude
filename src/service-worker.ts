@@ -79,7 +79,7 @@ self.addEventListener("message", (event) => {
 });
 
 // Any other custom service worker logic can go here.
-const CACHE_NAME = "v2"; // Incrementar a versão conforme necessário
+const CACHE_NAME = "v3"; // Incrementar a versão conforme necessário
 
 self.addEventListener("install", (event) => {
 //   self.skipWaiting(); // Força o Service Worker a ativar imediatamente após a instalação

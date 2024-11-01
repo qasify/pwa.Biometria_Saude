@@ -1,12 +1,14 @@
-import React, { } from "react";
-import Signup from "./pages/Login";
+import React from "react";
+import Signup from "./pages/Signup";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import InstallPromptPopup from "./components/InstallPromptPopup/InstallPromptPopup";
+import Auth from "./pages/Auth";
+import Login from "./pages/Login";
+import Logs from "./pages/Logs";
 
 const App: React.FC = () => {
-
   // useEffect(() => {
   //   console.log(isInstalled)
   //   const timeout = setTimeout(() => {
@@ -18,11 +20,14 @@ const App: React.FC = () => {
   return (
     <div className="flex min-h-screen w-full overflow-y-auto bg-background-light">
       <Routes>
+        <Route path="/auth" element={<Auth />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/logs" element={<Logs />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/home" element={<Home />} />
         </Route>
-        <Route path="*" element={<Navigate to="/signup" replace />} />
+        <Route path="*" element={<Navigate to="/auth" replace />} />
       </Routes>
       <InstallPromptPopup />
     </div>
