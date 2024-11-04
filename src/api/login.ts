@@ -2,7 +2,7 @@ import axios from "axios";
 import { keysToCamelCase } from "../utils/helpers";
 
 const API_URL =
-  "";
+  "https://api.biometria.automais.tec.br/api/Autenticacao/CpfFoto";
 
 interface Credentials {
   cpf: string;
@@ -21,7 +21,7 @@ export const login = async (
   try {
     const response = await axios.post(API_URL, {
       cpf: credentials.cpf,
-      foto: credentials.foto,
+      foto: credentials.foto.replace(/^data:image\/[a-zA-Z]+;base64,/, ""),
     });
 
     const camelCaseData = keysToCamelCase(response?.data);

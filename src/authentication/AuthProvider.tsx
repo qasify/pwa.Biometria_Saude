@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { UserData } from "../types";
+import { AuthUser, UserData } from "../types";
 
 interface AuthContextType {
-  authenticatedUser: UserData | null;
+  authenticatedUser: AuthUser | UserData | null;
   setAuthenticatedUser: (user: any) => void;
 }
 
@@ -11,11 +11,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [authenticatedUser, setAuthenticatedUser] = useState<UserData | null>(
+  const [authenticatedUser, setAuthenticatedUser] = useState<AuthUser | null>(
     null
   );
 
-  const handleAuthentication = (user: UserData) => {
+  const handleAuthentication = (user: AuthUser) => {
     setAuthenticatedUser(user);
   };
 

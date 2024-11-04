@@ -7,8 +7,11 @@ import { login } from "../../api/login";
 import { LoginErrors } from "./types";
 import { formatCpf, validateCpf } from "../Signup/utils/helpers";
 import constants from "./utils/constants";
+import { useAuth } from "../../authentication/AuthProvider";
 
 const Login: React.FC = () => {
+  const { setAuthenticatedUser } = useAuth();
+
   const [cpf, setCpf] = useState("");
   const [step, setStep] = useState<"cpf" | "camera">("cpf");
   const [isLoading, setIsLoading] = useState(false);
@@ -39,27 +42,28 @@ const Login: React.FC = () => {
   };
 
   const handleCapture = async (imageSrc: string) => {
-    navigate("/logs");
-    // const cpfValue = cpf.replace(/\D/g, "");
+    // navigate("/logs");
+    const cpfValue = cpf.replace(/\D/g, "");
 
-    // setIsLoading(true);
-    // setError(null);
-    // try {
-    //   const response = await login({
-    //     cpf: cpfValue,
-    //     foto: "",
-    //   });
-    //   if (response?.id) {
-    //     navigate("/logs");
-    //   } else {
-    //     setStep("cpf");
-    //   }
-    // } catch (err) {
-    //   setError("Erro ao conectar com o servidor");
-    //   setStep("cpf");
-    // } finally {
-    //   setIsLoading(false);
-    // }
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await login({
+        cpf: cpfValue,
+        foto: imageSrc,
+      });
+      if (response?.id) {
+        setAuthenticatedUser(response)
+        navigate("/logs");
+      } else {
+        setStep("cpf");
+      }
+    } catch (err) {
+      setError("Erro ao conectar com o servidor");
+      setStep("cpf");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

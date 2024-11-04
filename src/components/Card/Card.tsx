@@ -15,7 +15,7 @@ export const Card: React.FC<CardProps> = ({ children, className = '' }) => {
 
 export const CardHeader: React.FC<CardProps> = ({ children, className = '' }) => {
   return (
-    <div className={`px-4 py-5 border-b border-gray-200 sm:px-6 ${className}`}>
+    <div className={`px-4 py-5 border-b border-gray-3 sm:px-6 ${className}`}>
       {children}
     </div>
   );
