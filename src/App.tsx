@@ -7,6 +7,7 @@ import InstallPromptPopup from "./components/InstallPromptPopup/InstallPromptPop
 import Auth from "./pages/Auth";
 import Login from "./pages/Login";
 import Logs from "./pages/Logs";
+import Problems from "./pages/Problems";
 
 const App: React.FC = () => {
   // useEffect(() => {
@@ -18,11 +19,18 @@ const App: React.FC = () => {
   //   return clearTimeout(timeout)
   // }, [isInstalled])
   return (
-    <div className="flex min-h-screen w-full overflow-y-auto bg-background-light">
+    <div className="flex min-h-screen w-full overflow-y-auto  flex-col p-5 justify-center ">
+      <img
+        src="/assets/images/logo_angra.png"
+        alt="Logo"
+        className="mx-auto h-[151px] my-2"
+      />
+
       <Routes>
         <Route path="/auth" element={<Auth />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/problems" element={<Problems />} />
         {/* <Route path="/logs" element={<Logs />} /> */}
         <Route element={<ProtectedRoute />}>
           <Route path="/home" element={<Home />} />

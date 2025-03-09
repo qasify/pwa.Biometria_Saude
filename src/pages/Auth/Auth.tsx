@@ -1,40 +1,47 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../../components';
-import Card, { CardBody } from '../../components/Card';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import ScreenHeader from "../../components/ScreenHeader";
+import NavButton from "../../components/NavButton";
 
 const Auth: React.FC = () => {
   const navigate = useNavigate();
 
   const handleHaveAccount = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
   const handleNeedAccount = () => {
-    navigate('/signup');
+    navigate("/signup");
+  };
+
+  const handleHaveAProblem = () => {
+    navigate("/problems");
   };
 
   return (
-    <div className="w-full flex items-center justify-center p-2 self-center justify-self-center">
-      <Card className="max-w-md w-full space-y-8">
-        <CardBody>
-          <img
-            src="/assets/images/logo_angra.png"
-            alt="Logo"
-            className="mx-auto max-h-[130px]"
-          />
-          <h1 className="text-center text-2xl font-bold mt-4 mb-8">CADASTRO BIOMÉTRICO</h1>
-          
-          <div className="space-y-4">
-            <Button onClick={handleHaveAccount} className="!w-full">
-              Já tenho uma conta
-            </Button>
-            <Button  variant="bordered" onClick={handleNeedAccount} className="!w-full">
-              Preciso criar uma conta
-            </Button>
-          </div>
-        </CardBody>
-      </Card>
+    <div className="w-full flex flex-col items-center justify-center p-2 self-center justify-self-center">
+      <ScreenHeader title="BIOMETRIA FACIAL" />
+
+      <div className="space-y-4 w-full mt-20 px-5">
+        <NavButton
+          imageSrc="/assets/images/screen1.png"
+          altText="Face Activation"
+          text="Ative sua Face"
+          onClick={handleHaveAccount}
+        />
+        <NavButton
+          imageSrc="/assets/images/screen2.jpeg"
+          altText="Facial Registration"
+          text="Cadastro Facial"
+          onClick={handleNeedAccount}
+        />
+        <NavButton
+          imageSrc="/assets/images/screen3.jpeg"
+          altText="Have a Problem?"
+          text="Tenho um Problema"
+          onClick={handleHaveAProblem}
+        />
+      </div>
     </div>
   );
 };

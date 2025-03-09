@@ -1,18 +1,25 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Card, { CardBody } from "../../components/Card";
-import { Button, InputField } from "../../components";
+import { InputField } from "../../components";
 import CameraCapture from "../../components/CameraCapture";
 import { login } from "../../api/login";
 import { LoginErrors } from "./types";
 import { formatCpf, validateCpf } from "../Signup/utils/helpers";
 import constants from "./utils/constants";
 import { useAuth } from "../../authentication/AuthProvider";
+import ScreenHeader from "../../components/ScreenHeader";
+import { FormDataType } from "./types";
+import EnrollmentButton from "../../components/EnrollmentButton";
+import LocationDropdown from "../../components/LocationDropDown";
 
 const Login: React.FC = () => {
   const { setAuthenticatedUser } = useAuth();
 
-  const [cpf, setCpf] = useState("");
+  const [formData, setFormData] = useState<FormDataType>({
+    cpf: "",
+    enrollment: undefined,
+    location: undefined,
+  });
   const [step, setStep] = useState<"cpf" | "camera">("cpf");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -21,12 +28,15 @@ const Login: React.FC = () => {
 
   const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrors((prev) => ({ ...prev, cpf: null } as LoginErrors));
-    setCpf(formatCpf(e.target.value));
+    setFormData((prev) => ({ ...prev, cpf: formatCpf(e.target.value) }));
   };
 
-  const handleCpfSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const cpfValue = cpf.replace(/\D/g, "");
+  const handleEnrollmentChange = (value: number) => {
+    setFormData((prev) => ({ ...prev, enrollment: value }));
+  };
+
+  const handleCpfSubmit = () => {
+    const cpfValue = formData.cpf.replace(/\D/g, "");
     const cpfVaild = validateCpf(cpfValue);
 
     if (!cpfVaild) {
@@ -43,7 +53,7 @@ const Login: React.FC = () => {
 
   const handleCapture = async (imageSrc: string) => {
     // navigate("/logs");
-    const cpfValue = cpf.replace(/\D/g, "");
+    const cpfValue = formData.cpf.replace(/\D/g, "");
 
     setIsLoading(true);
     setError(null);
@@ -53,7 +63,7 @@ const Login: React.FC = () => {
         foto: imageSrc,
       });
       if (response?.id) {
-        setAuthenticatedUser(response)
+        setAuthenticatedUser(response);
         navigate("/logs");
       } else {
         setStep("cpf");
@@ -67,46 +77,58 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card
-        className={`space-y-8 min-w-[300px] w-[400px] ${
-          step === "cpf" ? "lg:w-[450px]" : "lg:w-auto"
-        }`}
-      >
-        <CardBody>
-          <img
-            src="/assets/images/logo_angra.png"
-            alt="Logo"
-            className="mx-auto max-h-[130px]"
+    <div className="w-full flex flex-col items-center justify-center self-center justify-self-center gap-6 max-w-[500px]">
+      {step === "cpf" ? (
+        <div className="flex flex-col gap-5 w-full">
+          <InputField
+            label="CPF:"
+            type="tel"
+            placeholder="Enter CPF"
+            value={formData.cpf}
+            onChange={handleCpfChange}
+            error={errors?.cpf}
+            pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
           />
-          <h1 className="text-center text-2xl font-bold">
-            CADASTRO BIOMÉTRICO
-          </h1>
-          {step === "cpf" ? (
-            <form onSubmit={handleCpfSubmit} className="mt-8 space-y-6">
-              <InputField
-                label="CPF:"
-                type="tel"
-                placeholder="Enter CPF"
-                value={cpf}
-                onChange={handleCpfChange}
-                error={errors?.cpf}
-                pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
-              />
-              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-              <Button type="submit" disabled={isLoading} className="!w-full">
-                Próximo
-              </Button>
-            </form>
-          ) : (
-            <CameraCapture
-              onCapture={handleCapture}
-              onCancel={() => setStep("cpf")}
-            />
-          )}
-          {isLoading && <p className="text-center mt-4">Carregando...</p>}
-        </CardBody>
-      </Card>
+          <div className="flex flex-col gap-2 w-full">
+            <EnrollmentButton
+              isSelected={formData.enrollment === 1}
+              onClick={() => handleEnrollmentChange(1)}
+            >
+              MATRÍCULA 1
+            </EnrollmentButton>
+            <EnrollmentButton
+              isSelected={formData.enrollment === 2}
+              onClick={() => handleEnrollmentChange(2)}
+            >
+              MATRÍCULA 2
+            </EnrollmentButton>
+            <EnrollmentButton
+              isSelected={formData.enrollment === 3}
+              onClick={() => handleEnrollmentChange(3)}
+            >
+              MATRÍCULA 3
+            </EnrollmentButton>
+          </div>
+
+          <LocationDropdown/>
+
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+          <img
+            src="/assets/images/screen1.png"
+            alt="Face Activation"
+            className="rounded-full object-cover w-[156px] h-[147px] self-center"
+          />
+
+          <ScreenHeader title="ATIVE SUA FACE" onClick={handleCpfSubmit} />
+        </div>
+      ) : (
+        <CameraCapture
+          onCapture={handleCapture}
+          onCancel={() => setStep("cpf")}
+        />
+      )}
+      {isLoading && <p className="text-center mt-4">Carregando...</p>}
     </div>
   );
 };

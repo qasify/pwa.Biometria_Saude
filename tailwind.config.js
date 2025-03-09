@@ -54,8 +54,8 @@ module.exports = {
         dark: "#1F2937",
       },
       "gray-5": {
-        DEFAULT: "#F1F5F9",
-        light: "#F1F5F9",
+        DEFAULT: "#E9E9EB",
+        light: "#F5F5F5",
         dark: "#111827",
       },
       "gray-6": {
@@ -220,6 +220,9 @@ module.exports = {
       animation: {
         typing:
           "typing 3s steps(30, end) infinite alternate, blink .75s step-end infinite",
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
       },
     },
   },
