@@ -1,6 +1,12 @@
 import React from "react";
 import Signup from "./pages/Signup";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import InstallPromptPopup from "./components/InstallPromptPopup/InstallPromptPopup";
@@ -12,6 +18,7 @@ import { IoMdHome } from "react-icons/io";
 
 const App: React.FC = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   // useEffect(() => {
   //   console.log(isInstalled)
@@ -43,13 +50,15 @@ const App: React.FC = () => {
         <Route path="*" element={<Navigate to="/auth" replace />} />
       </Routes>
 
-      <button
-        className="absolute flex justify-center items-center w-10 h-10 rounded-lg bottom-6 self-center"
-        onClick={() => navigate("/")}
-      >
-        {/* @ts-ignore */}
-        <IoMdHome size={24} />
-      </button>
+      {pathname !== "/auth" && (
+        <button
+          className="absolute flex justify-center items-center w-10 h-10 rounded-lg bottom-6 self-center"
+          onClick={() => navigate("/")}
+        >
+          {/* @ts-ignore */}
+          <IoMdHome size={24} />
+        </button>
+      )}
       <InstallPromptPopup />
     </div>
   );

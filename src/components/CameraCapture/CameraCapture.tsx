@@ -57,7 +57,7 @@ const CameraCapture: React.FC<CameraCaptureProps> = ({ onCapture, onCancel }) =>
           <img src={url} alt="Screenshot" />
         </div>
       )}
-      <div className="absolute bottom-0 flex flex-wrap w-full justify-center items-center gap-2 py-4">
+      <div className="absolute z-50 bottom-0 flex flex-wrap w-full justify-center items-center gap-2 py-4 bg-white">
         {url ? (
           <>
             <Button  onClick={handleConfirm} className="min-w-[160px]">

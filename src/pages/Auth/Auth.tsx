@@ -26,7 +26,7 @@ const Auth: React.FC = () => {
         <NavButton
           imageSrc="/assets/images/screen1.png"
           altText="Face Activation"
-          text="Ative sua Face"
+          text="Escolhe sua Matrícula"
           onClick={handleHaveAccount}
         />
         <NavButton

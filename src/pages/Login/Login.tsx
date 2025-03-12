@@ -19,6 +19,7 @@ const Login: React.FC = () => {
     cpf: "",
     enrollment: undefined,
     location: undefined,
+    foto: "",
   });
   const [step, setStep] = useState<"cpf" | "camera">("cpf");
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +36,7 @@ const Login: React.FC = () => {
     setFormData((prev) => ({ ...prev, enrollment: value }));
   };
 
-  const handleCpfSubmit = () => {
+  const handleCpfSubmit = async () => {
     const cpfValue = formData.cpf.replace(/\D/g, "");
     const cpfVaild = validateCpf(cpfValue);
 
@@ -48,19 +49,13 @@ const Login: React.FC = () => {
     }
 
     setError(null);
-    setStep("camera");
-  };
-
-  const handleCapture = async (imageSrc: string) => {
-    // navigate("/logs");
-    const cpfValue = formData.cpf.replace(/\D/g, "");
 
     setIsLoading(true);
     setError(null);
     try {
       const response = await login({
         cpf: cpfValue,
-        foto: imageSrc,
+        foto: formData.foto,
       });
       if (response?.id) {
         setAuthenticatedUser(response);
@@ -74,6 +69,15 @@ const Login: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePicClick = () => {
+    setStep("camera");
+  };
+
+  const handleCapture = async (imageSrc: string) => {
+    setFormData((prev) => ({ ...prev, foto: imageSrc }));
+    setStep("cpf");
   };
 
   return (
@@ -110,17 +114,21 @@ const Login: React.FC = () => {
             </EnrollmentButton>
           </div>
 
-          <LocationDropdown/>
+          <LocationDropdown />
 
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
           <img
-            src="/assets/images/screen1.png"
+            src={formData.foto || "/assets/images/screen1.png"}
             alt="Face Activation"
             className="rounded-full object-cover w-[156px] h-[147px] self-center"
+            onClick={handlePicClick}
           />
 
-          <ScreenHeader title="ATIVE SUA FACE" onClick={handleCpfSubmit} />
+          <ScreenHeader
+            title="Escolhe sua Matrícula"
+            onClick={handleCpfSubmit}
+          />
         </div>
       ) : (
         <CameraCapture

@@ -17,16 +17,20 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import { useAuth } from "../../authentication/AuthProvider";
 import ScreenHeader from "../../components/ScreenHeader";
 import ImportantNote from "../../components/ImportantNote";
+import CameraCapture from "../../components/CameraCapture";
+import DatePicker from "../../components/DatePicker";
 
 const BiometricRegistration: React.FC = () => {
   const navigate = useNavigate();
 
   const { setAuthenticatedUser } = useAuth();
 
+  const [step, setStep] = useState<"cpf" | "camera">("cpf");
   const [cpf, setCpf] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [foto, setFoto] = useState("");
   const [errors, setErrors] = useState<SignupErrors | null>(null);
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(
     null
@@ -38,9 +42,9 @@ const BiometricRegistration: React.FC = () => {
     setCpf(formatCpf(e.target.value));
   };
 
-  const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBirthDateChange = (value:string) => {
     setErrors((prev) => ({ ...prev, birthDate: null } as SignupErrors));
-    setBirthDate(e.target.value);
+    setBirthDate(value);
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,65 +121,85 @@ const BiometricRegistration: React.FC = () => {
     navigate("/home");
   };
 
-  // Test Credentials
-  // 05684082769
-  // 14/02/1983
-  // 21979997000
-  // email@email.com.br
+  const handlePicClick = () => {
+    setStep("camera");
+  };
+
+  const handleCapture = async (imageSrc: string) => {
+    setFoto(imageSrc);
+    setStep("cpf");
+  };
 
   return (
     <>
-      <div className="w-full flex flex-col items-center justify-center self-center justify-self-center gap-6 max-w-[500px]">
-        <ScreenHeader title="CADASTRO FACIAL" />
+      <div className="w-full flex flex-col items-center justify-center self-center justify-self-center gap-3 max-w-[500px]">
+        {step === "cpf" ? (
+          <>
+            <ScreenHeader title="CADASTRO FACIAL" />
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-          <InputField
-            label="CPF:"
-            type="tel"
-            placeholder="Digite o CPF"
-            value={cpf}
-            onChange={handleCpfChange}
-            error={errors?.cpf}
-            pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
-          />
-          <InputField
-            label="Data de Nascimento:"
-            type="date"
-            placeholder="dd/mm/yyyy"
-            value={birthDate}
-            onChange={handleBirthDateChange}
-            error={errors?.birthDate}
-          />
-          <InputField
-            label="Celular:"
-            type="tel"
-            placeholder="Digite o número de telefone"
-            value={phone}
-            onChange={handlePhoneChange}
-            error={errors?.phone}
-            pattern="\(\d{2}\) \d{5}-\d{4}"
-          />
-          <InputField
-            label="Email:"
-            type="email"
-            placeholder="Digite o e-mail"
-            value={email}
-            onChange={handleEmailChange}
-            error={errors?.email}
-          />
-          <div className="flex justify-center mt-4 w-full">
-            <Button
-              onClick={handleSubmit}
-              className="!w-full"
-              isLoading={isLoading}
-              disabled={isLoading}
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-4 w-full"
             >
-              Enviar
-            </Button>
-          </div>
-        </form>
+              <InputField
+                label="CPF:"
+                type="tel"
+                placeholder="Digite o CPF"
+                value={cpf}
+                onChange={handleCpfChange}
+                error={errors?.cpf}
+                pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+              />
+              <DatePicker
+                label="Data de Nascimento:"
+                value={birthDate}
+                onChange={handleBirthDateChange}
+                error={errors?.birthDate}
+              />
+              <InputField
+                label="Celular:"
+                type="tel"
+                placeholder="Digite o número de telefone"
+                value={phone}
+                onChange={handlePhoneChange}
+                error={errors?.phone}
+                pattern="\(\d{2}\) \d{5}-\d{4}"
+              />
+              <InputField
+                label="Email:"
+                type="email"
+                placeholder="Digite o e-mail"
+                value={email}
+                onChange={handleEmailChange}
+                error={errors?.email}
+              />
+              <div className="flex justify-center mt-4 w-full">
+                <Button
+                  onClick={handleSubmit}
+                  className="!w-full"
+                  isLoading={isLoading}
+                  disabled={isLoading}
+                >
+                  Enviar
+                </Button>
+              </div>
+            </form>
 
-        <ImportantNote note="Caso já exista foto cadastrada, ela será substituída!"/>
+            <img
+              src={foto || "/assets/images/screen1.png"}
+              alt="Face Activation"
+              className="rounded-full object-cover w-[120px] h-[120px] self-center"
+              onClick={handlePicClick}
+            />
+
+            <ImportantNote note="Caso já exista foto cadastrada, ela será substituída!" />
+          </>
+        ) : (
+          <CameraCapture
+            onCapture={handleCapture}
+            onCancel={() => setStep("cpf")}
+          />
+        )}
       </div>
       <ConfirmationModal
         isVisible={!!confirmationMessage}

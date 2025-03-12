@@ -13,7 +13,7 @@ const PROBLEMS_LIST: ProblemType[] = [
     label: "Não sou eu na foto",
     color: "#FDECEC",
     icon: "📷",
-    text: "Caso tenha seu registro de ponto e você não foi identificado, basta fazer um novo cadastro.<br/> Caso tenha feito um novo cadastro e a foto não foi substituída, pedimos que repeita o procedimento mais uma vez, pois pode ter ocorrido problema de internet ou conexão com o relógio.<br/> Caso tenha feito o cadastro mais de 3 vezes e seu cadastro não foi ativado no local onde esta, pedimos que acione o suporte na tela anterior. ",
+    text: "Caso tenha seu registro de ponto e você não foi identificado.",
   },
   {
     id: 2,
